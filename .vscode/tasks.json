@@ -1,0 +1,179 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        //
+        // Shells
+        //
+        {
+            "label": "Run DB shell",
+            "type": "shell",
+            "command": [
+                "psql -h $PGHOST -U $PGUSER -d $PGDATABASE"
+            ],
+        },
+        {
+            "label": "Run BE shell",
+            "type": "shell",
+            "command": [
+                "cd /workspace/BE &&",
+                "ts-node",
+            ],
+        },
+
+
+        //
+        // Build BackEnd
+        //
+        {
+            "label": "Build BE",
+            "type": "shell",
+            "command": [
+                "cd /workspace/BE &&",
+                "npm install &&",
+                "npm run build"
+            ],
+        },
+        {
+            "label": "Rebuild BE",
+            "type": "shell",
+            "command": [
+                "cd /workspace/BE &&",
+                "rm -rf package-lock.json dist node_modules &&",
+                "npm install &&",
+                "npm run build"
+            ],
+        },
+        {
+            "label": "Build BE and run",
+            "type": "shell",
+            "command": [
+                "cd /workspace/BE &&",
+                "npm install &&",
+                "npm run build &&",
+                "npm run start",
+            ],
+        },
+        {
+            "label": "Rebuild BE and run",
+            "type": "shell",
+            "command": [
+                "cd /workspace/BE &&",
+                "rm -rf package-lock.json dist node_modules &&",
+                "npm install &&",
+                "npm run build &&",
+                "npm run start",
+            ],
+        },
+        {
+            "label": "Build BE and run dev",
+            "type": "shell",
+            "command": [
+                "cd /workspace/BE &&",
+                "npm install &&",
+                "npm run build &&",
+                "npm run dev",
+            ],
+        },
+
+
+        //
+        // Run test
+        //
+        {
+            "label": "Rebuild and run test",
+            "type": "shell",
+            "command": [
+                // BE
+                "echo \"Run BE test\" &&",
+                "cd /workspace/BE &&",
+                "rm -rf package-lock.json dist node_modules &&",
+                "npm install &&",
+                "npm run build &&",
+                "npm run test &&",
+                // FE
+                "echo \"Run FE test\" &&",
+                "cd /workspace/FE &&",
+                "rm -rf package-lock.json dist node_modules &&",
+                "npm install &&",
+                "npm run build &&",
+                "npm run test",
+            ],
+        },
+
+
+        //
+        // Examples
+        //
+        {
+            "label": "Run BE login",
+            "type": "shell",
+            "command": "curl -X POST -H 'Content-Type: application/json' -d '{\"username\":\"admin\", \"password\":\"----\"}' http://0.0.0.0:3000/auth/login"
+        },
+        {
+            "label": "Run BE get all products",
+            "type": "shell",
+            "command": "curl -X GET -H 'Content-Type: application/json' -H 'Authentication: be43f4a9-46e2-4134-906c-f81d74a4703b' http://0.0.0.0:3000/products"
+        },
+        {
+            "label": "Run BE add new products",
+            "type": "shell",
+            "command": "curl -X POST -H 'Content-Type: application/json' -H 'Authentication: be43f4a9-46e2-4134-906c-f81d74a4703b' -d '{\"name\":\"ddd\"}' http://0.0.0.0:3000/products"
+        },
+
+
+        //
+        // Build FrontEnd
+        //
+        {
+            "label": "Build FE",
+            "type": "shell",
+            "command": [
+                "cd /workspace/FE &&",
+                "npm install &&",
+                "npm run build"
+            ],
+        },
+        {
+            "label": "Rebuild FE",
+            "type": "shell",
+            "command": [
+                "cd /workspace/FE &&",
+                "rm -rf package-lock.json dist node_modules &&",
+                "npm install &&",
+                "npm run build"
+            ],
+        },
+        {
+            "label": "Build FE and run",
+            "type": "shell",
+            "command": [
+                "cd /workspace/FE &&",
+                "npm install &&",
+                "npm run build &&",
+                "npm run start",
+            ],
+        },
+        {
+            "label": "Rebuild FE and run",
+            "type": "shell",
+            "command": [
+                "cd /workspace/FE &&",
+                "rm -rf package-lock.json dist node_modules &&",
+                "npm install &&",
+                "npm run build &&",
+                "npm run start",
+            ],
+        },
+        {
+            "label": "Build FE and run watch",
+            "type": "shell",
+            "command": [
+                "cd /workspace/FE &&",
+                "npm install &&",
+                "npm run build &&",
+                "npm run watch",
+            ],
+        },
+
+    ]
+}

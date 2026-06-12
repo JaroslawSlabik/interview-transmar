@@ -1,0 +1,22 @@
+{
+  "name": "TRANSMAR-DEV",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "dev-app",
+  "remoteUser": "developer",
+  "workspaceFolder": "/workspace",
+  
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ],
+
+      "settings": {
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true,
+        "files.eol": "\n",
+      }
+    }
+  }
+}

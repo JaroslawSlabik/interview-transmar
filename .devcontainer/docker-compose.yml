@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  dev-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    pull_policy: if_not_present
+    user: developer
+    volumes:
+      - ..:/workspace:cached
+    command: sleep infinity
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 2s
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  init-postgres-data:
+    image: postgres:15-alpine
+    pull_policy: if_not_present
+    depends_on:
+      postgres:
+        condition: service_healthy
+    entrypoint: [ '/bin/sh', '-c' ]
+    env_file:
+      - .env
+    volumes:
+      - ..:/workspace:cached
+    command: |
+      "
+      cd /workspace/.devcontainer &&
+      sh restore_sql_db.sh
+      "
+
+    deploy:
+      resources:
+        limits:
+          memory: 200M
+
+  redis:
+    image: redis:7-alpine
+    pull_policy: if_not_present
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 2s
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+#  frontend-review:
+#    image: nginx:alpine
+#    pull_policy: if_not_present
+#    ports:
+#      - "8080:80"
+#    volumes:
+#      - ../frontend/dist:/usr/share/nginx/html:ro
+#    depends_on:
+#      - backend-review
+#
+#  backend-review:
+#    image: node:20-alpine
+#    pull_policy: if_not_present
+#    user: node
+#    working_dir: /home/node/app
+#    ports:
+#      - "3000:3000"
+#    command: node -e "const http = require('http'); http.createServer((req, res) => res.end('Backend Review Mock Running')).listen(3000);"
+#    environment:
+#      - DATABASE_URL=postgres://transmar:transmar1@postgres:5432/transmar_db
+#      - REDIS_URL=redis://redis:6379
+#    depends_on:
+#      - postgres
+#      - redis
+
+volumes:
+  postgres_data:
+  redis_data:
+

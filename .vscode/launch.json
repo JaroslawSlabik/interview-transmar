@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug BE",
+      "preLaunchTask": "Rebuild BE",
+      "runtimeExecutable": "/workspace/BE/node_modules/.bin/ts-node",
+      "runtimeArgs": [
+        "--esm"
+      ],
+      "program": "/workspace/BE/app.ts",
+      "args": ["/workspace/BE/app.ts", "--trace-deprecation"],
+      "internalConsoleOptions": "openOnSessionStart",
+      "skipFiles": ["<node_internals>/**"],
+      "cwd": "/workspace/BE/",
+    }
+  ]
+}
