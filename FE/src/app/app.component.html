@@ -1,0 +1,146 @@
+<!-- Global toast notifications -->
+<app-toast />
+
+@if (!isLoggedIn()) {
+  <app-login-form
+    [loginError]="loginError()"
+    (login)="handleLogin($event)"
+  />
+}
+
+@if (isLoggedIn()) {
+  <!-- ── TOP NAVBAR ───────────────────────────────────────── -->
+  <nav class="fixed top-0 left-0 right-0 h-14 bg-fb-blue flex items-center px-4 z-50 shadow-md">
+    <div class="flex items-center gap-2.5 text-white">
+      <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158
+               a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0
+               00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782
+               0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+        </svg>
+      </div>
+      <span class="font-bold text-lg tracking-tight">TRANSMAR</span>
+    </div>
+    <span class="ml-4 text-white/60 text-sm hidden md:block">System Zarządzania Produkcją</span>
+    <div class="ml-auto">
+      <button
+        (click)="handleLogout()"
+        class="flex items-center gap-1.5 px-3 py-1.5 bg-white/15 hover:bg-white/25 text-white text-sm font-medium rounded-lg transition-colors"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+        </svg>
+        Wyloguj
+      </button>
+    </div>
+  </nav>
+
+  <!-- ── SIDEBAR ──────────────────────────────────────────── -->
+  <aside class="fixed left-0 top-14 h-[calc(100vh-3.5rem)] w-60 bg-white border-r border-fb-border overflow-y-auto z-40">
+    <div class="p-4">
+      <p class="text-xs font-semibold text-fb-secondary uppercase tracking-wider mb-2 px-2">Moduły</p>
+      <nav class="space-y-0.5">
+
+        <a href="#products"
+          class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-fb-text hover:bg-fb-hover transition-colors group">
+          <div class="w-7 h-7 bg-fb-blue-light rounded-md flex items-center justify-center group-hover:bg-fb-blue transition-colors">
+            <svg class="w-4 h-4 text-fb-blue group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+          </div>
+          Produkty
+          <span class="ml-auto text-xs font-medium bg-fb-blue-light text-fb-blue px-1.5 py-0.5 rounded-full">{{ products().length }}</span>
+        </a>
+
+        <a href="#workstations"
+          class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-fb-text hover:bg-fb-hover transition-colors group">
+          <div class="w-7 h-7 bg-fb-blue-light rounded-md flex items-center justify-center group-hover:bg-fb-blue transition-colors">
+            <svg class="w-4 h-4 text-fb-blue group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          </div>
+          Stanowiska
+          <span class="ml-auto text-xs font-medium bg-fb-blue-light text-fb-blue px-1.5 py-0.5 rounded-full">{{ workstations().length }}</span>
+        </a>
+
+        <a href="#assembly-lines"
+          class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-fb-text hover:bg-fb-hover transition-colors group">
+          <div class="w-7 h-7 bg-fb-blue-light rounded-md flex items-center justify-center group-hover:bg-fb-blue transition-colors">
+            <svg class="w-4 h-4 text-fb-blue group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+            </svg>
+          </div>
+          Linie montażowe
+          <span class="ml-auto text-xs font-medium bg-fb-blue-light text-fb-blue px-1.5 py-0.5 rounded-full">{{ assemblyLines().length }}</span>
+        </a>
+
+        @if (selectedLineId()) {
+          <a href="#allocations"
+            class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-fb-text hover:bg-fb-hover transition-colors group">
+            <div class="w-7 h-7 bg-fb-blue-light rounded-md flex items-center justify-center group-hover:bg-fb-blue transition-colors">
+              <svg class="w-4 h-4 text-fb-blue group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+            </div>
+            Alokacje
+            <span class="ml-auto text-xs font-medium bg-fb-green/15 text-fb-green px-1.5 py-0.5 rounded-full">{{ allocatedWorkstations().length }}</span>
+          </a>
+        }
+
+      </nav>
+    </div>
+
+    <!-- Sidebar footer -->
+    <div class="absolute bottom-0 left-0 right-0 px-4 py-3 border-t border-fb-border bg-white">
+      <p class="text-xs text-fb-secondary text-center">TRANSMAR &copy; 2026</p>
+    </div>
+  </aside>
+
+  <!-- ── MAIN CONTENT ──────────────────────────────────────── -->
+  <main class="ml-60 mt-14 min-h-[calc(100vh-3.5rem)] bg-fb-bg">
+    <div class="p-6 max-w-6xl mx-auto space-y-5">
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+        <app-product-list
+          [products]="products()"
+          (addProduct)="onAddProduct($event)"
+        />
+        <app-workstation-list
+          [workstations]="workstations()"
+          [selectedLineId]="selectedLineId()"
+          (addWorkstation)="onAddWorkstation($event)"
+          (allocate)="onAllocateWorkstation($event)"
+        />
+      </div>
+
+      <app-assembly-line-list
+        [assemblyLines]="assemblyLines()"
+        [products]="products()"
+        [selectedLineId]="selectedLineId()"
+        [selectedFilterProductId]="selectedFilterProductId()"
+        (addLine)="onAddAssemblyLine($event)"
+        (deleteLine)="onDeleteLine($event)"
+        (selectLine)="onSelectLine($event)"
+        (filterChange)="onFilterProductChange($event)"
+      />
+
+      @if (selectedLineId()) {
+        <app-allocation-panel
+          [allocatedWorkstations]="allocatedWorkstations()"
+          [selectedLineId]="selectedLineId()!"
+          (move)="onMoveAllocation($event)"
+          (remove)="onRemoveAllocation($event)"
+        />
+      }
+
+    </div>
+  </main>
+}
+

@@ -1,6 +1,24 @@
 version: '3.8'
 
 services:
+  dev-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    pull_policy: if_not_present
+    user: developer
+    ports:
+      - "3000:3000"
+      - "4200:4200"
+    volumes:
+      - ..:/workspace:cached
+    command: sleep infinity
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - redis
+
   postgres:
     image: postgres:15-alpine
     restart: unless-stopped
@@ -53,39 +71,6 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
-
-  frontend-review:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    pull_policy: if_not_present
-    user: developer
-    ports:
-      - "4200:4200"
-    command: cd /FE && npm install && npm run build && npm run start"
-    env_file:
-      - .env
-    volumes:
-      - ../FE:/FE:cached
-    depends_on:
-      - backend-review
-
-  backend-review:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    pull_policy: if_not_present
-    user: developer
-    volumes:
-      - ../BE:/BE:cached
-    ports:
-      - "3000:3000"
-    command: cd /BE && npm install && npm run build && npm run start"
-    env_file:
-      - .env
-    depends_on:
-      - postgres
-      - redis
 
 volumes:
   postgres_data:

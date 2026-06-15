@@ -1,6 +1,6 @@
 {
   "name": "TRANSMAR-DEV",
-  "dockerComposeFile": "docker-compose.yml",
+  "dockerComposeFile": "docker-compose-dev.yml",
   "service": "dev-app",
   "remoteUser": "developer",
   "workspaceFolder": "/workspace",

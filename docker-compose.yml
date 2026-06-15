@@ -9,9 +9,9 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 30s
-      timeout: 10s
+      timeout: 2s
       retries: 5
-      start_period: 2s
+      start_period: 4s
     ports:
       - "5432:5432"
     volumes:
@@ -27,7 +27,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ..:/workspace:cached
+      - .:/workspace:cached
     command: |
       "
       cd /workspace/.devcontainer &&
@@ -46,9 +46,9 @@ services:
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 30s
-      timeout: 10s
+      timeout: 2s
       retries: 5
-      start_period: 2s
+      start_period: 4s
     ports:
       - "6379:6379"
     volumes:
@@ -56,31 +56,45 @@ services:
 
   frontend-review:
     build:
-      context: .
+      context: ./.devcontainer
       dockerfile: Dockerfile
     pull_policy: if_not_present
     user: developer
     ports:
       - "4200:4200"
-    command: cd /FE && npm install && npm run build && npm run start"
+    entrypoint: []
+    command: >
+      /bin/bash -c "
+      cd /FE && 
+      npm install && 
+      npm run build && 
+      npm run start
+      "
     env_file:
       - .env
     volumes:
-      - ../FE:/FE:cached
+      - ./FE:/FE:cached
     depends_on:
       - backend-review
 
   backend-review:
     build:
-      context: .
+      context: ./.devcontainer
       dockerfile: Dockerfile
     pull_policy: if_not_present
     user: developer
     volumes:
-      - ../BE:/BE:cached
+      - ./BE:/BE:cached
     ports:
       - "3000:3000"
-    command: cd /BE && npm install && npm run build && npm run start"
+    entrypoint: []
+    command: >
+      /bin/bash -c "
+      cd /BE && 
+      npm install && 
+      npm run build && 
+      npm run start
+      "
     env_file:
       - .env
     depends_on:

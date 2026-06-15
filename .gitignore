@@ -1,3 +1,8 @@
 BE/node_modules
 BE/dist
 BE/package-lock.json
+
+FE/node_modules
+FE/dist
+FE/package-lock.json
+FE/.angular
